@@ -21,7 +21,6 @@ import (
 	eventEntity "order-service/internal/modules/event/models/entity"
 	ticketEntity "order-service/internal/modules/ticket/models/entity"
 
-	"github.com/google/uuid"
 	"go.elastic.co/apm"
 )
 
@@ -136,13 +135,10 @@ func (c commandUsecase) CreateQueueRoom(origCtx context.Context, payload request
 	}
 
 	data := entity.QueueRoom{
-		QueueId:     uuid.New().String(),
 		UserId:      payload.UserId,
 		EventId:     event.EventId,
 		QueueNumber: state,
 		CountryCode: event.Country.Code,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
 	}
 
 	respQueue := <-c.roomRepositoryCommand.InsertOneRoom(ctx, data)
@@ -151,10 +147,8 @@ func (c commandUsecase) CreateQueueRoom(origCtx context.Context, payload request
 	}
 
 	return &response.QueueResp{
-		QueueId:     data.QueueId,
 		UserId:      data.UserId,
 		QueueNumber: data.QueueNumber,
 		CountryCode: data.CountryCode,
-		CreatedAt:   data.CreatedAt,
 	}, nil
 }

@@ -1,9 +1,10 @@
-package queries_test
+package commands_test
 
 import (
 	"context"
-	"order-service/internal/modules/event"
-	mongoRQ "order-service/internal/modules/event/repositories/queries"
+	"order-service/internal/modules/order"
+	"order-service/internal/modules/order/models/request"
+	mongoRC "order-service/internal/modules/order/repositories/commands"
 	"order-service/internal/pkg/helpers"
 	mocks "order-service/mocks/pkg/databases/mongodb"
 	mocklog "order-service/mocks/pkg/log"
@@ -18,14 +19,14 @@ type CommandTestSuite struct {
 	suite.Suite
 	mockMongodb *mocks.Collections
 	mockLogger  *mocklog.Logger
-	repository  event.MongodbRepositoryQuery
+	repository  order.MongodbRepositoryCommand
 	ctx         context.Context
 }
 
 func (suite *CommandTestSuite) SetupTest() {
 	suite.mockMongodb = new(mocks.Collections)
 	suite.mockLogger = &mocklog.Logger{}
-	suite.repository = mongoRQ.NewQueryMongodbRepository(
+	suite.repository = mongoRC.NewCommandMongodbRepository(
 		suite.mockMongodb,
 		suite.mockLogger,
 	)
@@ -36,14 +37,18 @@ func TestCommandTestSuite(t *testing.T) {
 	suite.Run(t, new(CommandTestSuite))
 }
 
-func (suite *CommandTestSuite) TestFindEventById() {
+func (suite *CommandTestSuite) TestUpdateBankTicket() {
+	payload := request.UpdateBankTicketReq{
+		CountryCode: "code",
+		TicketType:  "type",
+	}
 
-	// Mock FindOne
+	// Mock UpsertOne
 	expectedResult := make(chan helpers.Result)
-	suite.mockMongodb.On("FindOne", mock.Anything, mock.Anything).Return((<-chan helpers.Result)(expectedResult))
+	suite.mockMongodb.On("FindOneAndUpdate", mock.Anything, mock.Anything, mock.Anything).Return((<-chan helpers.Result)(expectedResult))
 
 	// Act
-	result := suite.repository.FindEventById(suite.ctx, mock.Anything)
+	result := suite.repository.UpdateBankTicket(suite.ctx, payload)
 	// Asset
 	assert.NotNil(suite.T(), result, "Expected a result")
 
@@ -56,6 +61,6 @@ func (suite *CommandTestSuite) TestFindEventById() {
 	// Wait for the goroutine to complete
 	<-result
 
-	// Assert FindOne
-	suite.mockMongodb.AssertCalled(suite.T(), "FindOne", mock.Anything, mock.Anything)
+	// Assert UpsertOne
+	suite.mockMongodb.AssertCalled(suite.T(), "FindOneAndUpdate", mock.Anything, mock.Anything, mock.Anything)
 }

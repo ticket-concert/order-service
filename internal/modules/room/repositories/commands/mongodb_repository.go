@@ -7,6 +7,9 @@ import (
 	"order-service/internal/pkg/databases/mongodb"
 	wrapper "order-service/internal/pkg/helpers"
 	"order-service/internal/pkg/log"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type commandMongodbRepository struct {
@@ -23,6 +26,9 @@ func NewCommandMongodbRepository(mongodb mongodb.Collections, log log.Logger) ro
 
 func (c commandMongodbRepository) InsertOneRoom(ctx context.Context, room entity.QueueRoom) <-chan wrapper.Result {
 	output := make(chan wrapper.Result)
+	room.QueueId = uuid.NewString()
+	room.CreatedAt = time.Now()
+	room.UpdatedAt = time.Now()
 
 	go func() {
 		resp := <-c.mongoDb.InsertOne(mongodb.InsertOne{

@@ -14,17 +14,37 @@ type MongodbRepositoryQuery struct {
 	mock.Mock
 }
 
-// FindOneUserId provides a mock function with given fields: ctx, userId
-func (_m *MongodbRepositoryQuery) FindOneUserId(ctx context.Context, userId string) <-chan helpers.Result {
-	ret := _m.Called(ctx, userId)
+// FindOneLastQueue provides a mock function with given fields: ctx, eventId
+func (_m *MongodbRepositoryQuery) FindOneLastQueue(ctx context.Context, eventId string) <-chan helpers.Result {
+	ret := _m.Called(ctx, eventId)
 
 	if len(ret) == 0 {
-		panic("no return value specified for FindOneUserId")
+		panic("no return value specified for FindOneLastQueue")
 	}
 
 	var r0 <-chan helpers.Result
 	if rf, ok := ret.Get(0).(func(context.Context, string) <-chan helpers.Result); ok {
-		r0 = rf(ctx, userId)
+		r0 = rf(ctx, eventId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(<-chan helpers.Result)
+		}
+	}
+
+	return r0
+}
+
+// FindOneQueueByUserId provides a mock function with given fields: ctx, userId, eventId
+func (_m *MongodbRepositoryQuery) FindOneQueueByUserId(ctx context.Context, userId string, eventId string) <-chan helpers.Result {
+	ret := _m.Called(ctx, userId, eventId)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindOneQueueByUserId")
+	}
+
+	var r0 <-chan helpers.Result
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) <-chan helpers.Result); ok {
+		r0 = rf(ctx, userId, eventId)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(<-chan helpers.Result)

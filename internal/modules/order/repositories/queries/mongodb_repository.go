@@ -46,25 +46,6 @@ func (q queryMongodbRepository) FindBankTicketByParam(ctx context.Context, queue
 	return output
 }
 
-func (q queryMongodbRepository) FindBankTicketByTicketNumber(ctx context.Context, ticketNumber string) <-chan wrapper.Result {
-	var bankTicket entity.BankTicket
-	output := make(chan wrapper.Result)
-
-	go func() {
-		resp := <-q.mongoDb.FindOne(mongodb.FindOne{
-			Result:         &bankTicket,
-			CollectionName: "bank-ticket",
-			Filter: bson.M{
-				"ticketNumber": ticketNumber,
-			},
-		}, ctx)
-		output <- resp
-		close(output)
-	}()
-
-	return output
-}
-
 func (q queryMongodbRepository) FindOrderByUser(ctx context.Context, payload request.OrderList) <-chan wrapper.Result {
 	var orders []entity.Order
 	var countData int64

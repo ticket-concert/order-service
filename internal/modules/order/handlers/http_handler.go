@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"order-service/internal/modules/order"
 	"order-service/internal/modules/order/models/request"
 	"order-service/internal/pkg/errors"
@@ -47,7 +46,6 @@ func (t OrderHttpHandler) CreateOrder(c *fiber.Ctx) error {
 	req.UserId = userId
 
 	if err := t.Validator.Struct(req); err != nil {
-		fmt.Println(err)
 		return helpers.RespError(c, t.Logger, errors.BadRequest(err.Error()))
 	}
 	resp, err := t.OrderUsecaseCommand.CreateOrderTicket(c.Context(), *req)
