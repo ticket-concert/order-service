@@ -24,7 +24,7 @@ func NewQueryMongodbRepository(mongodb mongodb.Collections, log log.Logger) orde
 	}
 }
 
-func (q queryMongodbRepository) FindBankTicketByParam(ctx context.Context, queueId string, userId string) <-chan wrapper.Result {
+func (q queryMongodbRepository) FindBankTicketByParam(ctx context.Context, eventId string, userId string) <-chan wrapper.Result {
 	var bankTicket entity.BankTicket
 	output := make(chan wrapper.Result)
 
@@ -34,7 +34,7 @@ func (q queryMongodbRepository) FindBankTicketByParam(ctx context.Context, queue
 			CollectionName: "bank-ticket",
 			Filter: bson.M{
 				"$and": []interface{}{
-					bson.M{"queueId": queueId},
+					bson.M{"eventId": eventId},
 					bson.M{"userId": userId},
 				},
 			},
