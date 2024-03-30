@@ -25,6 +25,11 @@ import (
 	"go.elastic.co/apm"
 )
 
+var (
+	Configs = configs.GetConfig
+	Now     = time.Now
+)
+
 type commandUsecase struct {
 	orderRepositoryCommand  order.MongodbRepositoryCommand
 	orderRepositoryQuery    order.MongodbRepositoryQuery
@@ -62,8 +67,8 @@ func (c commandUsecase) CreateOrderTicket(origCtx context.Context, payload reque
 	})
 	defer span.End()
 
-	if configs.GetConfig().DayFlag {
-		day := time.Now().Weekday()
+	if Configs().DayFlag {
+		day := Now().Weekday()
 		if day != time.Saturday && day != time.Sunday {
 			return nil, errors.BadRequest("This day not Saturday or Sunday")
 		}
@@ -97,7 +102,7 @@ func (c commandUsecase) CreateOrderTicket(origCtx context.Context, payload reque
 		return nil, errors.InternalServerError("cannot parsing data queue")
 	}
 
-	currentTicket := <-c.orderRepositoryQuery.FindBankTicketByParam(ctx, queueData.QueueId, payload.UserId)
+	currentTicket := <-c.orderRepositoryQuery.FindBankTicketByParam(ctx, event.EventId, payload.UserId)
 	if currentTicket.Error != nil {
 		return nil, queueRoom.Error
 	}

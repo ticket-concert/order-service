@@ -17,7 +17,7 @@ type UsecaseQuery interface {
 }
 
 type MongodbRepositoryQuery interface {
-	FindBankTicketByParam(ctx context.Context, queueId string, userId string) <-chan wrapper.Result
+	FindBankTicketByParam(ctx context.Context, eventId string, userId string) <-chan wrapper.Result
 	FindOrderByUser(ctx context.Context, payload request.OrderList) <-chan wrapper.Result
 	FindBankTicketByUser(ctx context.Context, payload request.PreOrderList) <-chan wrapper.Result
 }
