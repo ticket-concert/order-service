@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"fmt"
 	"order-service/configs"
 	"order-service/internal/modules/event"
 	eventEntity "order-service/internal/modules/event/models/entity"
@@ -70,44 +71,62 @@ func (c commandUsecase) CreateOrderTicket(origCtx context.Context, payload reque
 	if Configs().DayFlag {
 		day := Now().Weekday()
 		if day != time.Saturday && day != time.Sunday {
-			return nil, errors.BadRequest("This day not Saturday or Sunday")
+			msg := "this day not Saturday or Sunday"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
+			return nil, errors.BadRequest("this day not Saturday or Sunday")
 		}
 	}
 
 	eventData := <-c.eventRepositoryQuery.FindEventById(ctx, payload.EventId)
 	if eventData.Error != nil {
+		msg := "Error DB connection FindEventById"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", eventData.Error))
 		return nil, eventData.Error
 	}
 
 	if eventData.Data == nil {
+		msg := "event not found"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("event not found")
 	}
 
 	event, ok := eventData.Data.(*eventEntity.Event)
 	if !ok {
+		msg := "cannot parsing data event"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", eventData.Data))
 		return nil, errors.InternalServerError("cannot parsing data event")
 	}
 
 	queueRoom := <-c.roomRepositoryQuery.FindOneQueueByUserId(ctx, payload.UserId, payload.EventId)
 	if queueRoom.Error != nil {
+		msg := "Error DB connection FindOneQueueByUserId"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", queueRoom.Error))
 		return nil, queueRoom.Error
 	}
 
 	if queueRoom.Data == nil {
+		msg := "user not in the queue"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("user not in the queue")
 	}
 
 	queueData, ok := queueRoom.Data.(*roomEntity.QueueRoom)
 	if !ok {
+		msg := "cannot parsing data queue"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", queueRoom.Data))
 		return nil, errors.InternalServerError("cannot parsing data queue")
 	}
 
 	currentTicket := <-c.orderRepositoryQuery.FindBankTicketByParam(ctx, event.EventId, payload.UserId)
 	if currentTicket.Error != nil {
-		return nil, queueRoom.Error
+		msg := "Error DB connection FindBankTicketByParam"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", currentTicket.Error))
+		return nil, currentTicket.Error
 	}
 
 	if currentTicket.Data != nil {
+		msg := "user already order ticket"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("user already order ticket")
 	}
 
@@ -118,15 +137,21 @@ func (c commandUsecase) CreateOrderTicket(origCtx context.Context, payload reque
 		}
 		totalAvailableTicket := <-c.ticketRepositoryQuery.FindTotalAvalailableTicketByCountry(ctx, ticketReq)
 		if totalAvailableTicket.Error != nil {
+			msg := "Error DB connection FindTotalAvalailableTicketByCountry"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", totalAvailableTicket.Error))
 			return nil, totalAvailableTicket.Error
 		}
 
 		if totalAvailableTicket.Data == nil {
+			msg := "country not found"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 			return nil, errors.BadRequest("country not found")
 		}
 
 		totalAvailable, ok := totalAvailableTicket.Data.(*[]ticketEntity.AggregateTotalTicket)
 		if !ok {
+			msg := "cannot parsing data data"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", totalAvailableTicket.Data))
 			return nil, errors.InternalServerError("cannot parsing data")
 		}
 		eligibleBuy := true
@@ -136,39 +161,55 @@ func (c commandUsecase) CreateOrderTicket(origCtx context.Context, payload reque
 			}
 		}
 		if !eligibleBuy {
+			msg := "offline ticket still ready"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 			return nil, errors.BadRequest("offline ticket still ready")
 		}
 	}
 
 	ticketDetailData := <-c.ticketRepositoryQuery.FindTicketByEventId(ctx, event.EventId, payload.TicketType)
 	if ticketDetailData.Error != nil {
-		return nil, queueRoom.Error
+		msg := "Error DB connection FindTicketByEventId"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", ticketDetailData.Error))
+		return nil, ticketDetailData.Error
 	}
 
 	if ticketDetailData.Data == nil {
+		msg := "ticket detail not found"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("ticket detail not found")
 	}
 
 	ticketDetail, ok := ticketDetailData.Data.(*ticketEntity.Ticket)
 	if !ok {
-		return nil, errors.InternalServerError("cannot parsing data")
+		msg := "cannot parsing data ticket"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", ticketDetailData.Data))
+		return nil, errors.InternalServerError("cannot parsing data ticket")
 	}
 
 	if ticketDetail.TotalRemaining == 0 {
+		msg := "ticket category sold out"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("ticket category sold out")
 	}
 
 	userData := <-c.userRepositoryQuery.FindOneUserId(ctx, payload.UserId)
 	if userData.Error != nil {
+		msg := "Error DB connection FindOneUserId"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", userData.Error))
 		return nil, userData.Error
 	}
 
 	if userData.Data == nil {
-		return nil, errors.BadRequest("user not found")
+		msg := "event not found"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
+		return nil, errors.BadRequest("event not found")
 	}
 
 	user, ok := userData.Data.(*userEntity.User)
 	if !ok {
+		msg := "cannot parsing data user"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", userData.Data))
 		return nil, errors.InternalServerError("cannot parsing data user")
 	}
 
@@ -192,16 +233,22 @@ func (c commandUsecase) CreateOrderTicket(origCtx context.Context, payload reque
 
 	bankTicket := <-c.orderRepositoryCommand.UpdateBankTicket(ctx, bankTicketReq)
 	if bankTicket.Error != nil {
+		msg := "Error DB connection UpdateBankTicket"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", bankTicket.Error))
 		return nil, bankTicket.Error
 	}
 
 	if bankTicket.Data == nil {
+		msg := "event not found"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("failed to process order")
 	}
 
 	ticket, ok := bankTicket.Data.(*entity.BankTicket)
 	if !ok {
-		return nil, errors.InternalServerError("cannot parsing data")
+		msg := "cannot parsing data bank ticket"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", bankTicket.Data))
+		return nil, errors.InternalServerError("cannot parsing bank ticket")
 	}
 
 	ticketPayload := ticketEntity.Ticket{
@@ -212,6 +259,8 @@ func (c commandUsecase) CreateOrderTicket(origCtx context.Context, payload reque
 
 	ticketResp := <-c.ticketRepositoryCommand.UpdateOneTicketDetail(ctx, ticketPayload)
 	if ticketResp.Error != nil {
+		msg := "Error DB connection UpdateOneTicketDetail"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", ticketResp.Error))
 		return nil, ticketResp.Error
 	}
 

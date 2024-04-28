@@ -75,6 +75,7 @@ func (suite *QueryUsecaseTestSuite) TestFindOrderListErr() {
 		Error: errors.BadRequest("error"),
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockOrderRepositoryQuery.On("FindOrderByUser", mock.Anything, payload).Return(mockChannel(mockOrderByUser))
 
 	_, err := suite.usecase.FindOrderList(suite.ctx, payload)
@@ -92,6 +93,7 @@ func (suite *QueryUsecaseTestSuite) TestFindOrderListErrNil() {
 		Error: nil,
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockOrderRepositoryQuery.On("FindOrderByUser", mock.Anything, payload).Return(mockChannel(mockOrderByUser))
 
 	_, err := suite.usecase.FindOrderList(suite.ctx, payload)
@@ -111,6 +113,7 @@ func (suite *QueryUsecaseTestSuite) TestFindOrderListErrParse() {
 		Error: nil,
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockOrderRepositoryQuery.On("FindOrderByUser", mock.Anything, payload).Return(mockChannel(mockOrderByUser))
 
 	_, err := suite.usecase.FindOrderList(suite.ctx, payload)
@@ -171,6 +174,7 @@ func (suite *QueryUsecaseTestSuite) TestFindPreOrderListErr() {
 		Error: errors.BadRequest("error"),
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByUser", mock.Anything, payload).Return(mockChannel(mockBankTicketByUser))
 
 	_, err := suite.usecase.FindPreOrderList(suite.ctx, payload)
@@ -188,6 +192,7 @@ func (suite *QueryUsecaseTestSuite) TestFindPreOrderListErrNil() {
 		Error: nil,
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByUser", mock.Anything, payload).Return(mockChannel(mockBankTicketByUser))
 
 	_, err := suite.usecase.FindPreOrderList(suite.ctx, payload)
@@ -207,6 +212,7 @@ func (suite *QueryUsecaseTestSuite) TestFindPreOrderListErrParse() {
 		Error: nil,
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByUser", mock.Anything, payload).Return(mockChannel(mockBankTicketByUser))
 
 	_, err := suite.usecase.FindPreOrderList(suite.ctx, payload)

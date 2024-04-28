@@ -112,6 +112,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoom() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById3))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -133,6 +134,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrDay() {
 		Data:  nil,
 		Error: errors.BadRequest("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 
 	_, err := suite.usecase.CreateQueueRoom(suite.ctx, payload)
@@ -145,6 +147,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrDay() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById2))
 
 	_, err2 := suite.usecase.CreateQueueRoom(suite.ctx, payload)
@@ -162,6 +165,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErr() {
 		Data:  nil,
 		Error: errors.BadRequest("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 
 	_, err := suite.usecase.CreateQueueRoom(suite.ctx, payload)
@@ -174,6 +178,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErr() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById2))
 
 	_, err2 := suite.usecase.CreateQueueRoom(suite.ctx, payload)
@@ -193,6 +198,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrParse() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 
 	_, err := suite.usecase.CreateQueueRoom(suite.ctx, payload)
@@ -220,6 +226,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrQueue() {
 		Data:  nil,
 		Error: errors.BadRequest("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 
@@ -253,6 +260,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrLastQueue() {
 		Error: errors.BadRequest("error"),
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -290,6 +298,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrLastQueueParse() {
 		Error: nil,
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -322,6 +331,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrNotNil() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 
@@ -379,6 +389,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomEmptyRedis() {
 		Error: nil,
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -436,6 +447,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomEmptyRedisErr() {
 		Error: errors.BadRequest("error"),
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -495,6 +507,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomEmptyRedisErrTotal() {
 		Error: nil,
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -548,6 +561,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomEmptyRedisErrParse() {
 		CountryCode: "code",
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -599,6 +613,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrLimit() {
 		CountryCode: "code",
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
@@ -650,6 +665,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateQueueRoomErrInsert() {
 		CountryCode: "code",
 	}
 
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockFindEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneQueueByUserId))
 	suite.mockRoomRepositoryQuery.On("FindOneLastQueue", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockFindOneLastQueue))
