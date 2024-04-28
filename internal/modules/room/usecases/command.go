@@ -57,35 +57,49 @@ func (c commandUsecase) CreateQueueRoom(origCtx context.Context, payload request
 	if configs.GetConfig().DayFlag {
 		day := time.Now().Weekday()
 		if day != time.Saturday && day != time.Sunday {
-			return nil, errors.BadRequest("This day not Saturday or Sunday")
+			msg := "this day not Saturday or Sunday"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
+			return nil, errors.BadRequest("this day not Saturday or Sunday")
 		}
 	}
 
 	eventData := <-c.eventRepositoryQuery.FindEventById(ctx, payload.EventId)
 	if eventData.Error != nil {
+		msg := "Error DB connection FindEventById"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", eventData.Error))
 		return nil, eventData.Error
 	}
 
 	if eventData.Data == nil {
+		msg := "event not found"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("event not found")
 	}
 
 	event, ok := eventData.Data.(*eventEntity.Event)
 	if !ok {
-		return nil, errors.InternalServerError("cannot parsing data")
+		msg := "cannot parsing data event"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", eventData.Data))
+		return nil, errors.InternalServerError("cannot parsing data event")
 	}
 
 	queueRoom := <-c.roomRepositoryQuery.FindOneQueueByUserId(ctx, payload.UserId, payload.EventId)
 	if queueRoom.Error != nil {
+		msg := "Error DB connection FindOneQueueByUserId"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", queueRoom.Error))
 		return nil, queueRoom.Error
 	}
 
 	if queueRoom.Data != nil {
+		msg := "user already in the queue"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("user already in the queue")
 	}
 
 	lastQueue := <-c.roomRepositoryQuery.FindOneLastQueue(ctx, payload.EventId)
 	if lastQueue.Error != nil {
+		msg := "Error DB connection FindOneLastQueue"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", lastQueue.Error))
 		return nil, lastQueue.Error
 	}
 
@@ -94,6 +108,8 @@ func (c commandUsecase) CreateQueueRoom(origCtx context.Context, payload request
 	if lastQueue.Data != nil {
 		queue, ok := lastQueue.Data.(*entity.QueueRoom)
 		if !ok {
+			msg := "cannot parsing data last queue"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", lastQueue.Data))
 			return nil, errors.InternalServerError("cannot parsing data")
 		}
 		state = queue.QueueNumber + 1
@@ -105,11 +121,15 @@ func (c commandUsecase) CreateQueueRoom(origCtx context.Context, payload request
 	if checkedLimit == "" {
 		totalTicket := <-c.ticketRepositoryQuery.FindTotalAvalailableTicket(ctx, event.Country.Code, event.Tag)
 		if totalTicket.Error != nil {
+			msg := "Error DB connection FindTotalAvalailableTicket"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", totalTicket.Error))
 			return nil, totalTicket.Error
 		}
 
 		aggregateTicket, ok := totalTicket.Data.(*[]ticketEntity.AggregateTotalTicket)
 		if !ok {
+			msg := "cannot parsing data total ticket"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", totalTicket.Data))
 			return nil, errors.InternalServerError("cannot parsing data")
 		}
 
@@ -126,12 +146,16 @@ func (c commandUsecase) CreateQueueRoom(origCtx context.Context, payload request
 		limit, err := strconv.Atoi(checkedLimit)
 		queueLimit = limit
 		if err != nil {
+			msg := "cannot parsing redis data"
+			c.logger.Error(ctx, msg, fmt.Sprintf("%+v", checkedLimit))
 			return nil, errors.InternalServerError("cannot parsing redis data")
 		}
 	}
 
 	if state > queueLimit {
-		return nil, errors.BadRequest("Queue is full")
+		msg := "queue is full"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
+		return nil, errors.BadRequest("queue is full")
 	}
 
 	data := entity.QueueRoom{
@@ -143,6 +167,8 @@ func (c commandUsecase) CreateQueueRoom(origCtx context.Context, payload request
 
 	respQueue := <-c.roomRepositoryCommand.InsertOneRoom(ctx, data)
 	if respQueue.Error != nil {
+		msg := "Error DB connection InsertOneRoom"
+		c.logger.Error(ctx, msg, fmt.Sprintf("%+v", respQueue.Error))
 		return nil, respQueue.Error
 	}
 

@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"fmt"
 	"order-service/internal/modules/order"
 	"order-service/internal/modules/order/models/entity"
 	"order-service/internal/modules/order/models/request"
@@ -37,15 +38,21 @@ func (q queryUsecase) FindOrderList(origCtx context.Context, payload request.Ord
 
 	orderData := <-q.orderRepositoryQuery.FindOrderByUser(ctx, payload)
 	if orderData.Error != nil {
+		msg := "Error DB connection FindOrderByUser"
+		q.logger.Error(ctx, msg, fmt.Sprintf("%+v", orderData.Error))
 		return nil, orderData.Error
 	}
 
 	if orderData.Data == nil {
+		msg := "order not found"
+		q.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
 		return nil, errors.BadRequest("order not found")
 	}
 
 	orders, ok := orderData.Data.(*[]entity.Order)
 	if !ok {
+		msg := "cannot parsing data order"
+		q.logger.Error(ctx, msg, fmt.Sprintf("%+v", orderData.Data))
 		return nil, errors.InternalServerError("cannot parsing data order")
 	}
 
@@ -82,16 +89,22 @@ func (q queryUsecase) FindPreOrderList(origCtx context.Context, payload request.
 
 	bankTicketData := <-q.orderRepositoryQuery.FindBankTicketByUser(ctx, payload)
 	if bankTicketData.Error != nil {
+		msg := "Error DB connection FindBankTicketByUser"
+		q.logger.Error(ctx, msg, fmt.Sprintf("%+v", bankTicketData.Error))
 		return nil, bankTicketData.Error
 	}
 
 	if bankTicketData.Data == nil {
-		return nil, errors.BadRequest("order not found")
+		msg := "bank ticket not found"
+		q.logger.Error(ctx, msg, fmt.Sprintf("%+v", payload))
+		return nil, errors.BadRequest("bank ticket not found")
 	}
 
 	bankTicket, ok := bankTicketData.Data.(*[]entity.BankTicket)
 	if !ok {
-		return nil, errors.InternalServerError("cannot parsing data order")
+		msg := "cannot parsing data bank ticket"
+		q.logger.Error(ctx, msg, fmt.Sprintf("%+v", bankTicketData.Data))
+		return nil, errors.InternalServerError("cannot parsing data bank ticket")
 	}
 
 	var collectionData = make([]response.PreOrderList, 0)
