@@ -157,6 +157,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrEvent() {
 		},
 		Error: errors.BadRequest("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 
 	_, err := suite.usecase.CreateOrderTicket(suite.ctx, payload)
@@ -174,6 +175,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrEventNil() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 
 	_, err := suite.usecase.CreateOrderTicket(suite.ctx, payload)
@@ -193,6 +195,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrEventParse() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 
 	_, err := suite.usecase.CreateOrderTicket(suite.ctx, payload)
@@ -223,6 +226,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrQueue() {
 		},
 		Error: errors.BadRequest("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 
@@ -252,6 +256,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrQueueNil() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 
@@ -283,6 +288,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrQueueParse() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 
@@ -318,6 +324,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrBank() {
 		Data:  nil,
 		Error: errors.InternalServerError("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -356,6 +363,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrBankExist() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -428,6 +436,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketOnline() {
 			},
 		},
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -501,6 +510,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketOnlineErr() {
 		Data:  nil,
 		Error: errors.BadRequest("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -574,6 +584,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketOnlineErrNil() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -649,6 +660,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketOnlineErrParse() {
 		},
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -726,6 +738,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketOnlineFalse() {
 			},
 		},
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -791,6 +804,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrDetail() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -800,7 +814,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrDetail() {
 	suite.mockTicketRepositoryCommand.On("UpdateOneTicketDetail", mock.Anything, mock.Anything).Return(mockChannel(mockUpdateTicketDetail))
 
 	_, err := suite.usecase.CreateOrderTicket(suite.ctx, payload)
-	assert.NoError(suite.T(), err)
+	assert.Error(suite.T(), err)
 }
 
 func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrDetailNil() {
@@ -855,6 +869,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrDetailNil() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -921,6 +936,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrDetailParse() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -989,6 +1005,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketSold() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -1057,6 +1074,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrUser() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -1121,6 +1139,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrUserNil() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -1187,6 +1206,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrUserParse() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -1255,6 +1275,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrUpdateBank() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -1319,6 +1340,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrUpdateBankNil() {
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -1385,6 +1407,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrUpdateBankParse() 
 		Data:  nil,
 		Error: nil,
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
@@ -1453,6 +1476,7 @@ func (suite *CommandUsecaseTestSuite) TestCreateOrderTicketErrUpdateDetail() {
 		Data:  nil,
 		Error: errors.BadRequest("error"),
 	}
+	suite.mockLogger.On("Error", mock.Anything, mock.Anything, mock.Anything)
 	suite.mockEventRepositoryQuery.On("FindEventById", mock.Anything, mock.Anything).Return(mockChannel(mockEventById))
 	suite.mockRoomRepositoryQuery.On("FindOneQueueByUserId", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockQueueByUser))
 	suite.mockOrderRepositoryQuery.On("FindBankTicketByParam", mock.Anything, mock.Anything, mock.Anything).Return(mockChannel(mockBankTicketByParam))
