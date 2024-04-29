@@ -79,7 +79,10 @@ make coverage
 ![picture](/assets/HLD.jpg)
 
 ## Low Level Design Architecture
-![picture](/assets/LLD.jpg)
+![picture](/assets/LLD.png)
+
+## Usecase Diagram
+![picture](/assets/Usecase.jpg)
 
 ## ERD
 ```mermaid
